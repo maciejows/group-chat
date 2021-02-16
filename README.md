@@ -6,3 +6,6 @@ Rozwiązanie zadania dla studio200.
     npm install
 ## Uruchomienie
     npm start
+
+## Aplikacja zostanie uruchomiona pod adresem
+    http://localhost:4200/
