@@ -15,9 +15,15 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { Routes, RouterModule } from '@angular/router';
 import { AngularFireModule } from '@angular/fire';
 import { environment } from 'src/environments/environment';
+import { StoreModule } from '@ngrx/store';
+import { authReducer } from './store/auth.reducer';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { ChatComponent } from './components/chat/chat.component';
+import { AuthGuard } from './guards/auth.guard';
 const routes: Routes = [
   {path: '', component: LoginFormComponent},
-  {path: 'register', component: RegisterFormComponent}
+  {path: 'register', component: RegisterFormComponent},
+  {path: 'chat', component: ChatComponent, canActivate: [AuthGuard]}
 ];
 
 @NgModule({
@@ -25,7 +31,8 @@ const routes: Routes = [
     AppComponent,
     LoginFormComponent,
     RegisterFormComponent,
-    NavbarComponent
+    NavbarComponent,
+    ChatComponent
   ],
   imports: [
     BrowserModule,
@@ -33,6 +40,11 @@ const routes: Routes = [
     FormsModule,
     ReactiveFormsModule,
     RouterModule.forRoot(routes),
+    StoreModule.forRoot({auth: authReducer}),
+    StoreDevtoolsModule.instrument({
+      maxAge: 25, // Retains last 25 states
+      logOnly: environment.production, // Restrict extension to log-only mode
+    }),
     AngularFireModule.initializeApp(environment.firebaseConfig),
     // Angular material modules
     MatFormFieldModule,

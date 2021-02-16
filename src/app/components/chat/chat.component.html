@@ -1,0 +1,8 @@
+<div class="flex-container">
+    <h2>
+        Logged in as:
+    </h2>
+    <span *ngIf="(user$ | async) as user">
+        <p> {{user.email}}</p>
+    </span>
+</div>

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/services/auth.service';
+import { Credentials } from '../../models/Credentials';
 
 @Component({
   selector: 'app-register-form',
@@ -28,6 +29,6 @@ export class RegisterFormComponent implements OnInit {
   onSubmit(){
     let email: string = this.form.value.emailFormControl;
     let password: string = this.form.value.passwordFormControl;
-    this._auth.register(email, password);
+    this._auth.register(new Credentials(email, password));
   }
 }

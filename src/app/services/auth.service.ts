@@ -2,6 +2,10 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AngularFireAuth } from '@angular/fire/auth'
 import { User } from '../models/User';
+import { AuthState } from '../models/AuthState';
+import { Store } from '@ngrx/store';
+import { loginError, loginSuccess, registerError, registerSuccess } from '../store/auth.actions';
+import { Router } from '@angular/router';
 
 export interface Credentials {
   email: string;
@@ -12,20 +16,32 @@ export interface Credentials {
   providedIn: 'root'
 })
 export class AuthService {
-  readonly authState$: Observable<User | null> = this.fireAuth.authState;
+  constructor(
+    private store: Store<{auth: AuthState}>,
+    private router: Router,
+    private fireAuth: AngularFireAuth) {}
  
-  constructor(private fireAuth: AngularFireAuth) {}
- 
-  login(email: string, password: string) {
-    return this.fireAuth.signInWithEmailAndPassword(email, password)
-      .then( data => console.log(data))
-      .catch(error => console.log(error));
+  login(credentials: Credentials) {
+    return this.fireAuth.signInWithEmailAndPassword(credentials.email, credentials.password)
+      .then(data => this.handleLoginSuccess(data))
+      .catch(error => this.store.dispatch(loginError({error: error})));
+  }
+
+  handleLoginSuccess(data: any){
+    let user = new User(JSON.parse(JSON.stringify(data)));
+    this.store.dispatch(loginSuccess({user: user}));
+    this.router.navigateByUrl('/chat')
+  }
+
+  handleRegisterSuccess(){
+    this.router.navigateByUrl('/');
+    alert("Account created!");
   }
  
-  register(email: string, password: string) {
-    return this.fireAuth.createUserWithEmailAndPassword(email, password)
-    .then( data => console.log(`Register ${data}`))
-    .catch(error => console.log(error));
+  register(credentials: Credentials) {
+    return this.fireAuth.createUserWithEmailAndPassword(credentials.email, credentials.password)
+    .then( (_) => this.handleRegisterSuccess())
+    .catch(error => this.store.dispatch(registerError({error: error})));
   }
  
   logout() {

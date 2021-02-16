@@ -1,7 +1,6 @@
-export interface User {
-    uid: string;
+export class User {
     email: string;
-    displayName: string;
-    photoURL: string;
-    emailVerified: boolean;
+    constructor(data: any) {
+        this.email = data.user?.email?? '';
+    }
  }
