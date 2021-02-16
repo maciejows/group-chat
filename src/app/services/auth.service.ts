@@ -4,7 +4,7 @@ import { AngularFireAuth } from '@angular/fire/auth'
 import { User } from '../models/User';
 import { AuthState } from '../models/AuthState';
 import { Store } from '@ngrx/store';
-import { loginError, loginSuccess, registerError, registerSuccess } from '../store/auth.actions';
+import { loginError, loginSuccess, logoutError, logoutSuccess, registerError, registerSuccess } from '../store/auth.actions';
 import { Router } from '@angular/router';
 
 export interface Credentials {
@@ -33,18 +33,26 @@ export class AuthService {
     this.router.navigateByUrl('/chat')
   }
 
+ 
+  register(credentials: Credentials) {
+    return this.fireAuth.createUserWithEmailAndPassword(credentials.email, credentials.password)
+    .then((_) => this.handleRegisterSuccess())
+    .catch(error => this.store.dispatch(registerError({error: error})));
+  }
+
   handleRegisterSuccess(){
     this.router.navigateByUrl('/');
     alert("Account created!");
   }
  
-  register(credentials: Credentials) {
-    return this.fireAuth.createUserWithEmailAndPassword(credentials.email, credentials.password)
-    .then( (_) => this.handleRegisterSuccess())
-    .catch(error => this.store.dispatch(registerError({error: error})));
-  }
- 
   logout() {
-    return this.fireAuth.signOut();
+    return this.fireAuth.signOut()
+    .then((_) => this.handleLogoutSuccess())
+    .catch(error => this.store.dispatch(logoutError({error: error})));
+  }
+
+  handleLogoutSuccess(){
+    this.store.dispatch(logoutSuccess());
+    this.router.navigateByUrl('/');
   }
 }

@@ -5,4 +5,7 @@
     <span *ngIf="(user$ | async) as user">
         <p> {{user.email}}</p>
     </span>
+    <div class="align-center">
+        <button mat-stroked-button (click)="onLogout()">Logout</button>
+    </div>
 </div>

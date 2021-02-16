@@ -12,4 +12,4 @@ export const loginError = createAction('[Auth service] login Error', props<{erro
 
 export const logout = createAction('[Auth service] logout');
 export const logoutSuccess = createAction('[Auth service] logout Success');
-export const logoutError = createAction('[Auth service] logout Error');
+export const logoutError = createAction('[Auth service] logout Error', props<{error: string}>());
