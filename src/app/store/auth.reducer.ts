@@ -5,7 +5,8 @@ import { loginError, loginSuccess, logoutError, logoutSuccess, registerError } f
 
 export const initialState: AuthState = {
    user: {
-       email: ''
+       email: '',
+       uid: ''
    },
    isLoggedIn: false,
    error: '',
@@ -15,10 +16,9 @@ const _authReducer = createReducer(
     initialState,
     on(loginSuccess, (state, {user}) => ({...state, user: user, isLoggedIn: true})),
     on(loginError, (state, {error}) => ({...state, error: error})),
-    on(logoutSuccess, (state) => ({...state, user: {email: ''}, isLoggedIn: false})),
+    on(logoutSuccess, (state) => ({...state, user: {email: '', uid: ''}, isLoggedIn: false})),
     on(logoutError, (state, {error}) => ({...state, error: error})),
     on(registerError, (state, {error}) => ({...state, error: error}))
-
 );
 
 export function authReducer(state: AuthState | undefined, action: Action): AuthState {

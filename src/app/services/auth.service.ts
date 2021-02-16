@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
 import { AngularFireAuth } from '@angular/fire/auth'
 import { User } from '../models/User';
 import { AuthState } from '../models/AuthState';
 import { Store } from '@ngrx/store';
-import { loginError, loginSuccess, logoutError, logoutSuccess, registerError, registerSuccess } from '../store/auth.actions';
+import { loginError, loginSuccess, logoutError, logoutSuccess, registerError } from '../store/auth.actions';
 import { Router } from '@angular/router';
 
 export interface Credentials {
@@ -24,7 +23,7 @@ export class AuthService {
   login(credentials: Credentials) {
     return this.fireAuth.signInWithEmailAndPassword(credentials.email, credentials.password)
       .then(data => this.handleLoginSuccess(data))
-      .catch(error => this.store.dispatch(loginError({error: error})));
+      .catch(error => this.store.dispatch(loginError({error: error.message})));
   }
 
   handleLoginSuccess(data: any){
@@ -37,7 +36,7 @@ export class AuthService {
   register(credentials: Credentials) {
     return this.fireAuth.createUserWithEmailAndPassword(credentials.email, credentials.password)
     .then((_) => this.handleRegisterSuccess())
-    .catch(error => this.store.dispatch(registerError({error: error})));
+    .catch(error => this.store.dispatch(registerError({error: error.message})));
   }
 
   handleRegisterSuccess(){
@@ -48,7 +47,7 @@ export class AuthService {
   logout() {
     return this.fireAuth.signOut()
     .then((_) => this.handleLogoutSuccess())
-    .catch(error => this.store.dispatch(logoutError({error: error})));
+    .catch(error => this.store.dispatch(logoutError({error: error.message})));
   }
 
   handleLogoutSuccess(){

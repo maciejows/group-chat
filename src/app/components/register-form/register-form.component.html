@@ -28,4 +28,5 @@
         <button mat-stroked-button type="submit" [disabled]="!(form.valid)">Create</button>
     </div>
     </form>
+    <p *ngIf="(error$ | async) as error"> {{error}} </p>
 </div>

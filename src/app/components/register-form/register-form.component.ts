@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { AuthState } from 'src/app/models/AuthState';
 import { AuthService } from 'src/app/services/auth.service';
 import { Credentials } from '../../models/Credentials';
 
@@ -10,8 +13,11 @@ import { Credentials } from '../../models/Credentials';
 })
 export class RegisterFormComponent implements OnInit {
   form: FormGroup;
+  error$: Observable<string>;
   
-  constructor(private _auth: AuthService) { }
+  constructor(
+    private store: Store<{auth: AuthState}>,
+    private _auth: AuthService) { }
 
   ngOnInit(): void {
     this.form = new FormGroup({
@@ -21,9 +27,9 @@ export class RegisterFormComponent implements OnInit {
       ]),
       passwordFormControl: new FormControl('', [
         Validators.required,
-        // Todo; Any else?
       ])
-    })
+    });
+    this.error$ = this.store.select(state => state.auth.error);
   }
 
   onSubmit(){
