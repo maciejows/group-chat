@@ -12,8 +12,9 @@ import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon'; 
 import { MatButtonModule } from '@angular/material/button'; 
 import { MatToolbarModule } from '@angular/material/toolbar';
-
 import { Routes, RouterModule } from '@angular/router';
+import { AngularFireModule } from '@angular/fire';
+import { environment } from 'src/environments/environment';
 const routes: Routes = [
   {path: '', component: LoginFormComponent},
   {path: 'register', component: RegisterFormComponent}
@@ -32,6 +33,7 @@ const routes: Routes = [
     FormsModule,
     ReactiveFormsModule,
     RouterModule.forRoot(routes),
+    AngularFireModule.initializeApp(environment.firebaseConfig),
     // Angular material modules
     MatFormFieldModule,
     MatInputModule,

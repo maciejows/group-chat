@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "group-chat-fb04b": {
+      "hosting": {
+        "group-chat": [
+          "group-chat-fb04b"
+        ]
+      }
+    }
+  }
+}
